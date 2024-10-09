@@ -15,30 +15,20 @@ public class UserRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public boolean insertUser(User user, String id, String pw) {
+    public boolean insertUser(User user) throws DataAccessException {
         String sql = "INSERT INTO userdatas(id, pw, username, age) VALUE(?, ?, ?, ?)";
-        try {
-            jdbcTemplate.update(sql, id, pw, user.getUsername(), user.getAge());
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    public String getUserPassword(String id) throws DataAccessException {
-        String sql = "SELECT pw FROM userdatas WHERE id=?";
-        RowMapper<String> pwRowMapper = (r, i) -> r.getString("pw");
-
-        return jdbcTemplate.queryForObject(sql, pwRowMapper, id);
-
+        jdbcTemplate.update(sql, user.getId(), user.getPassword(), user.getUsername(), user.getAge());
+        return true;
     }
 
     public User getUser(String id) throws DataAccessException {
         String sql = "SELECT username, age FROM userdatas WHERE id=?";
-        RowMapper<User> pwRowMapper = (r, i) -> {
+        RowMapper<User> pwRowMapper = (row, i) -> {
             User emptyUser = new User();
-            emptyUser.setUsername(r.getString("username"));
-            emptyUser.setAge(r.getInt("age"));
+            emptyUser.setId(row.getString("id"));
+            emptyUser.setPassword(row.getString("pw"));
+            emptyUser.setUsername(row.getString("username"));
+            emptyUser.setAge(row.getInt("age"));
             return emptyUser;
         };
         return jdbcTemplate.queryForObject(sql, pwRowMapper, id);

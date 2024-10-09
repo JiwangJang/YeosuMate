@@ -5,7 +5,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
@@ -14,11 +13,10 @@ import java.util.Collection;
 @Data
 @RequiredArgsConstructor
 public class User implements UserDetails {
-
-    private final String id;
-    private final String password;
-    private final String username;
-    private final int age;
+    private String id;
+    private String password;
+    private String username;
+    private int age;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

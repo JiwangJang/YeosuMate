@@ -6,20 +6,29 @@
         <title>회원가입</title>
     </head>
     <body>
+        <input type="text" id="username" placeholder="이름입력" />
+        <input type="text" id="age" placeholder="나이입력" />
         <input type="text" id="id" placeholder="아이디입력" />
         <input type="text" id="pw" placeholder="비밀번호입력" />
         <button id="send">제출</button>
     </body>
     <script>
-        const id = document.querySelector("#id").value;
-        const pw = document.querySelector("#pw").value;
-
         document.querySelector("#send").addEventListener("click", () => {
+            const id = document.querySelector("#id").value;
+            const pw = document.querySelector("#pw").value;
+            const age = document.querySelector("#age").value;
+            const username = document.querySelector("#username").value;
+            console.log(id, pw, age);
             fetch("http://localhost:3000/api/register", {
                 method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
                 body: JSON.stringify({
                     id,
                     pw,
+                    age,
+                    username,
                 }),
             });
         });
