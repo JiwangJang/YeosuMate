@@ -1,0 +1,19 @@
+{
+    "properties": [
+        {
+            "name": "spring.datasouce.url",
+            "type": "java.lang.String",
+            "description": "this is a connection url"
+        },
+        {
+            "name": "spring.datasouce.username",
+            "type": "java.lang.String",
+            "description": "mysql username"
+        },
+        {
+            "name": "spring.datasouce.password",
+            "type": "java.lang.String",
+            "description": "mysql password"
+        }
+    ]
+}

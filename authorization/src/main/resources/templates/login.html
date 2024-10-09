@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>로그인</title>
+    </head>
+    <body>
+        <input type="text" id="id" placeholder="아이디입력" />
+        <input type="text" id="pw" placeholder="비밀번호입력" />
+        <button id="send">제출</button>
+    </body>
+    <script>
+        const id = document.querySelector("#id").value;
+        const pw = document.querySelector("#pw").value;
+
+        document.querySelector("#send").addEventListener("click", () => {
+            fetch("http://localhost:3000/api/login", {
+                method: "POST",
+                body: JSON.stringify({
+                    id,
+                    pw,
+                }),
+            });
+        });
+    </script>
+</html>
