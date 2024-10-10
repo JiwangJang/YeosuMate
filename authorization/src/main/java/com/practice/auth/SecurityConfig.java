@@ -12,32 +12,35 @@ import org.springframework.security.web.SecurityFilterChain;
 import com.practice.model.User;
 import com.practice.repository.UserRepository;
 
-// @Configuration
-// public class SecurityConfig {
-// @Bean
-// public PasswordEncoder passwordEncoder() {
-// return new BCryptPasswordEncoder();
-// }
+@Configuration
+public class SecurityConfig {
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-// @Bean
-// UserDetailsService userDetailsService(UserRepository userRepo) {
-// return id -> {
-// User user = userRepo.getUser(id);
-// if (user != null)
-// return user;
+    @Bean
+    UserDetailsService userDetailsService(UserRepository userRepo) {
+        return id -> {
+            User user = userRepo.getUser(id);
+            if (user != null)
+                return user;
 
-// throw new UsernameNotFoundException(id);
-// };
-// }
+            throw new UsernameNotFoundException(id);
+        };
+    }
 
-// @Bean
-// public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-// http.authorizeHttpRequests(authorize ->
-// authorize.requestMatchers("/security").hasRole("USER")
-// .anyRequest().permitAll())
-// .formLogin((formLogin -> formLogin.loginPage("/login")
-// .defaultSuccessUrl("/security")));
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.authorizeHttpRequests(authorize -> authorize
+                .anyRequest().permitAll())
+                .formLogin((formLogin -> formLogin.loginPage("/login")
+                        .defaultSuccessUrl("/security")));
 
-// return http.build();
-// }
-// }
+        http.csrf((csrf) -> {
+            csrf.disable();
+        });
+
+        return http.build();
+    }
+}

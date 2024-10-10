@@ -6,11 +6,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.practice.model.User;
 import com.practice.repository.UserRepository;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping(path = "/api", produces = "application/json")
@@ -21,9 +21,9 @@ public class AuthController {
         this.userRepo = userRepo;
     }
 
-    @PostMapping(path = "/register", consumes = "application/json")
-    public void register(@RequestBody User user) {
-        System.out.println(user);
+    @PostMapping(path = "/register")
+    public ResponseEntity<String> register(User model) {
+        System.out.println(model);
         // try {
         // userRepo.insertUser(user);
         // return true;
@@ -31,6 +31,7 @@ public class AuthController {
         // // TODO: handle exception
         // return false;
         // }
+        return ResponseEntity.status(HttpStatus.OK).body("null");
     }
 
 }

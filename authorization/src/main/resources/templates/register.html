@@ -15,21 +15,22 @@
     <script>
         document.querySelector("#send").addEventListener("click", () => {
             const id = document.querySelector("#id").value;
-            const pw = document.querySelector("#pw").value;
+            const password = document.querySelector("#pw").value;
             const age = document.querySelector("#age").value;
             const username = document.querySelector("#username").value;
-            console.log(id, pw, age);
+
+            const formData = new FormData();
+            formData.append("id", id);
+            formData.append("password", password);
+            formData.append("age", age);
+            formData.append("username", username);
+
             fetch("http://localhost:3000/api/register", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json",
+                    "Content-Type": "application/x-www-form-urlencoded",
                 },
-                body: JSON.stringify({
-                    id,
-                    pw,
-                    age,
-                    username,
-                }),
+                body: formData,
             });
         });
     </script>
