@@ -22,7 +22,7 @@ public class AuthController {
     }
 
     @PostMapping(path = "/register")
-    public ResponseEntity<String> register(User model) {
+    public ResponseEntity<String> register(@RequestBody User model) {
         System.out.println(model);
         // try {
         // userRepo.insertUser(user);
