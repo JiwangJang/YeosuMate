@@ -16,7 +16,7 @@ public class UserRepository {
     }
 
     public boolean insertUser(User user) throws DataAccessException {
-        String sql = "INSERT INTO userdatas(id, pw, username, age) VALUE(?, ?, ?, ?)";
+        String sql = "INSERT INTO userdatas(id, password, username, age) VALUE(?, ?, ?, ?)";
         jdbcTemplate.update(sql, user.getId(), user.getPassword(), user.getUsername(), user.getAge());
         return true;
     }
@@ -26,7 +26,7 @@ public class UserRepository {
         RowMapper<User> pwRowMapper = (row, i) -> {
             User emptyUser = new User();
             emptyUser.setId(row.getString("id"));
-            emptyUser.setPassword(row.getString("pw"));
+            emptyUser.setPassword(row.getString("password"));
             emptyUser.setUsername(row.getString("username"));
             emptyUser.setAge(row.getInt("age"));
             return emptyUser;

@@ -4,6 +4,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -13,9 +15,17 @@ import java.util.Collection;
 @Data
 @RequiredArgsConstructor
 public class User implements UserDetails {
+
+    @Size(min = 4, message = "this property(id)'s size must be at least 4")
     private String id;
+
+    @Size(min = 6, message = "this property(password)'s size must be at least 6")
     private String password;
+
+    @NotNull
     private String username;
+
+    @NotNull
     private int age;
 
     @Override
