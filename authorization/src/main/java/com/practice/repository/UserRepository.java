@@ -1,11 +1,12 @@
 package com.practice.repository;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.practice.model.User;
+
+import java.util.Optional;
 
 @Repository
 public class UserRepository {
@@ -15,40 +16,20 @@ public class UserRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    RowMapper<User> UserdataRowMapper = (row, i) -> {
+    RowMapper<Optional<User>> userMapper = (row, index) -> {
         User emptyUser = new User();
-        emptyUser.setId(row.getString("id"));
+        emptyUser.setCreatedAt(row.getDate("createdAt"));
+        emptyUser.setUpdatedAt(row.getDate("updateAt"));
+        emptyUser.setEmail(row.getString("email"));
+        emptyUser.setFullName(row.getString("fullName"));
+        emptyUser.setId(row.getInt("id"));
         emptyUser.setPassword(row.getString("password"));
-        emptyUser.setUsername(row.getString("username"));
-        emptyUser.setAge(row.getInt("age"));
-        emptyUser.setRefreshToken(row.getString("refresh_token"));
-        return emptyUser;
+        return Optional.of(emptyUser);
     };
 
-    public boolean insertUser(User user) throws DataAccessException {
-        String sql = "INSERT INTO userdatas(id, password, username, age) VALUE(?, ?, ?, ?)";
-        jdbcTemplate.update(sql, user.getId(), user.getPassword(), user.getUsername(), user.getAge());
-        return true;
-    }
-
-    public void refreshTokenUpdate(String refreshToken, String username) throws DataAccessException {
-        String sql = "UPDATE userdatas SET refresh_token=? WHERE username=?";
-        jdbcTemplate.update(sql, refreshToken, username);
-    }
-
-    public User getUserById(String id) throws DataAccessException {
-        String sql = "SELECT username, age FROM userdatas WHERE id=?";
-        return jdbcTemplate.queryForObject(sql, UserdataRowMapper, id);
-    }
-
-    public User getUserByRefreshToken(String refreshToken) throws DataAccessException {
-        String sql = "SELECT username, age FROM userdatas WHERE refresh_token=?";
-        return jdbcTemplate.queryForObject(sql, UserdataRowMapper, refreshToken);
-    }
-
-    public User getUserByUsername(String username) throws DataAccessException {
-        String sql = "SELECT username, age FROM userdatas WHERE username=?";
-        return jdbcTemplate.queryForObject(sql, UserdataRowMapper, username);
+    public Optional<User> findByEmail(String email) {
+        String sql = "SELECT * FROM users WHERE email=?";
+        return jdbcTemplate.queryForObject(sql, userMapper, email);
     }
 
 }
