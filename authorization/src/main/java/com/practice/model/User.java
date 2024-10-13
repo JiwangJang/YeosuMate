@@ -28,6 +28,17 @@ public class User implements UserDetails {
     @NotNull
     private int age;
 
+    @NotNull
+    private String refreshToken;
+
+    public void updateRefreshToken(String newRefreshToken) {
+        this.refreshToken = newRefreshToken;
+    }
+
+    public void destroyRefreshToken() {
+        this.refreshToken = null;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
