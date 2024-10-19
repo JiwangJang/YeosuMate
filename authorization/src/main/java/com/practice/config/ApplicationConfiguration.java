@@ -1,4 +1,4 @@
-package com.practice.auth;
+package com.practice.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,10 +13,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.practice.repository.UserRepository;
 
 @Configuration
-public class AuthConfig {
+public class ApplicationConfiguration {
     private final UserRepository userRepository;
 
-    public AuthConfig(UserRepository userRepository) {
+    public ApplicationConfiguration(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
