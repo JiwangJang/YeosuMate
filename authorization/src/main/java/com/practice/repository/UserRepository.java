@@ -6,11 +6,14 @@ import org.springframework.stereotype.Repository;
 
 import com.practice.model.User;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.Optional;
 import java.util.List;
 import java.util.Map;
 
 @Repository
+@Slf4j
 public class UserRepository {
     private JdbcTemplate jdbcTemplate;
 
@@ -35,17 +38,18 @@ public class UserRepository {
     }
 
     public User save(User user) {
-        String sql = "INSERT INTO users(fullName, email, password, createdAt, updatedAt) VALUES(?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO users(fullName, email, password, createdAt, updatedAt, roleId) VALUES(?, ?, ?, ?, ?, ?)";
+
+        log.info(user.getRole().getId().toString());
 
         jdbcTemplate.update(sql, user.getFullName(), user.getEmail(), user.getPassword(), user.getCreatedAt(),
-                user.getUpdatedAt());
+                user.getUpdatedAt(), user.getRole().getId());
 
         return user;
     }
 
     public List<Map<String, Object>> findAll() {
         String sql = "SELECT * FROM users;";
-        System.out.println(jdbcTemplate.queryForList(sql));
         return jdbcTemplate.queryForList(sql);
     }
 

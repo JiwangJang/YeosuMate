@@ -3,7 +3,7 @@
     <!-- ... -->
     </appender>
     <!-- ... -->
-    <logger name="org.springframework.security" level="trace" additivity="false">
+    <logger name="org.springframework.security" level="debug" additivity="false">
         <appender-ref ref="Console" />
     </logger>
 </configuration>

@@ -8,7 +8,10 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.practice.entities.Role;
 
 @Data
 @NoArgsConstructor
@@ -17,12 +20,15 @@ public class User implements UserDetails {
     private String fullName;
     private String email;
     private String password;
+    private Role role;
     private Date createdAt;
     private Date updatedAt;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + role.getName().name());
+
+        return List.of(authority);
     }
 
     @Override
