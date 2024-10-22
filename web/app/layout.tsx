@@ -1,3 +1,8 @@
+import "../public/css/reset.css";
+import "../public/css/fonts.css";
+import "../public/css/styles.css";
+import ColorSet from "@/util/colorSet";
+
 export default function RootLayout({
     children,
 }: Readonly<{
@@ -5,7 +10,16 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="ko">
-            <body>{children}</body>
+            <body>
+                <div
+                    className="container"
+                    style={{
+                        backgroundColor: ColorSet.BACKGROUND,
+                    }}
+                >
+                    {children}
+                </div>
+            </body>
         </html>
     );
 }
