@@ -1,6 +1,10 @@
 spring:
     application:
         name: client
+    datasource:
+        url: jdbc:mysql://localhost:3306/test_schema
+        username: root
+        password: fuckDruid1!
 
 server:
     port: 8080

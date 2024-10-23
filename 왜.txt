@@ -1,7 +1,2 @@
-Authorization Server 제작
- - 간단한 아이디 비밀번호 있고, 해당 아이디 비밀번호 입력하면 Access Token과 Refresh Token을 주도록 제작
- - /register -> 이쪽에 비밀번호와 아이디를 쿼리스트링으로 보내면 등록
-
-
- https://doubletapp.medium.com/how-we-implement-jwt-authentication-67fb5640530c
- 
+공부할 개념(공부해서 블로그에 정리글 올리기)
+ 1. CORS

@@ -1,4 +1,4 @@
-package com.practice.backend;
+package com.yeosu_mate.backend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
