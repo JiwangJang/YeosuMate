@@ -5,17 +5,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.yeosu_mate.backend.model.dto.LoginUserDto;
 import com.yeosu_mate.backend.model.dto.RegisterUserDto;
-import com.yeosu_mate.backend.model.entity.User;
 import com.yeosu_mate.backend.model.process.ProcessResult;
 import com.yeosu_mate.backend.repository.UserRepository;
+import com.yeosu_mate.backend.service.AuthService;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -25,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 @Slf4j
 public class AuthController {
     private UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
+    private AuthService authService;
 
     @PostMapping("/register")
     public ResponseEntity<ProcessResult> register(@RequestBody RegisterUserDto registerUserDto) {
@@ -38,17 +37,14 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ProcessResult> login(@RequestBody LoginUserDto loginUserDto) {
-        User user = (User) userRepository.loadUserByUsername(loginUserDto.getId());
+    public ResponseEntity<ProcessResult> login(@RequestBody LoginUserDto loginUserDto, HttpServletRequest request,
+            HttpServletResponse response) {
+        ProcessResult authenticationResult = authService.authenticate(request, response, loginUserDto);
 
-        if (passwordEncoder.matches(loginUserDto.getPassword(), user.getPassword())) {
-            // SecurityContextHolder에 등록하는과정
-            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(user, null,
-                    user.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authToken);
-            return ResponseEntity.ok(new ProcessResult(true, ""));
+        if (authenticationResult.isSuccess()) {
+            return ResponseEntity.ok(authenticationResult);
         } else {
-            return ResponseEntity.badRequest().body(new ProcessResult(false, "CHECK_PASSWORD"));
+            return ResponseEntity.badRequest().body(authenticationResult);
         }
     }
 }
