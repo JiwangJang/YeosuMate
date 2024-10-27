@@ -1,0 +1,25 @@
+공부할 개념(공부해서 블로그에 정리글 올리기)
+ 1. CORS
+
+ 인증방식 -> JWT기반인증
+
+ JWT인증 요약
+  1. 사용자가 로그인할 경우 accessToken과 refreshToken발행
+  2. refreshToken은 redis에 user_id를 키로 하여 저장
+  3. 사용자에게 accessToken과 refreshToken은 Payload로 내려줌
+  4. 사용자가 요청할 때 헤더에 엑세스토큰넣고 바디에 리프레쉬토큰
+  5. accessToken이 검증되면 그대로 사용 받아주고 새로운 엑세스토큰 보내주고, 만료시 리프레쉬토큰의 유효기간을 확인해서 남아있으면 엑세스토큰 재발급
+
+  accessToken은 쿠키로 관리하고 유효기간은 5분으로 설정
+  refreshToken은 쿠키로 관리하고 유효기간은 2주정도로 설정
+  모바일의 경우 토큰이 있으면 앱상에선 로그인 시켜주나, 실제 요청시 accessToken이나 refreshToken이 만료돼 있으면 새로운 토큰 발급후 전송 
+
+  JWT 저장소
+  localStorage vs Cookie
+
+  localStorage -> XSS공격에 취약하나(JS로 접근가능하므로), CSRF공격방어에 강력함
+  Cookies -> 쿠키에 httpOnly걸어두면 XSS공격방어에는 강력하나, CSRF공격에는 취약함(자동으로 쿠키를 보내기때문에)
+
+  해결책 
+  로컬스토리지에 토큰저장하고 XSS공격 방어에 심혈을 기울이기
+  

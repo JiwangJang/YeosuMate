@@ -1,5 +1,6 @@
 package com.yeosu_mate.backend.config;
 
+import org.apache.catalina.filters.CorsFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -9,10 +10,11 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.web.cors.CorsConfiguration;
@@ -29,7 +31,6 @@ import java.util.Arrays;
 @EnableWebSecurity(debug = true)
 @RequiredArgsConstructor
 public class AuthConfig {
-    private final SessionCheckFilter sessionCheckFilter;
     private final UserRepository userRepository;
 
     @Bean
@@ -51,24 +52,18 @@ public class AuthConfig {
                                 .permitAll()
                                 .anyRequest().authenticated());
 
-        // session configuration, 각 상황에서 던져지는 에러 핸들링
+        // JWT기반 인증을 사용할 것이므로 세션이 필요없음
         httpSecurity.sessionManagement(session -> session
-                .maximumSessions(1)
-                .maxSessionsPreventsLogin(true));
-
-        // setting securityContextRepository
-        httpSecurity.securityContext(context -> context.securityContextRepository(securityContextRepository()));
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         // CORS header setting
         httpSecurity.cors(cors -> cors.configurationSource(configurationSource()));
-
-        httpSecurity.addFilter(sessionCheckFilter);
 
         return httpSecurity.build();
     }
 
     @Bean
-    PasswordEncoder getPasswordEncoder() {
+    PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -78,15 +73,10 @@ public class AuthConfig {
     }
 
     @Bean
-    SecurityContextRepository securityContextRepository() {
-        return new HttpSessionSecurityContextRepository();
-    }
-
-    @Bean
     AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(userRepository);
-        provider.setPasswordEncoder(getPasswordEncoder());
+        provider.setPasswordEncoder(passwordEncoder());
 
         return provider;
     }
