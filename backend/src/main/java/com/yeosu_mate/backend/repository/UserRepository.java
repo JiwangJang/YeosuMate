@@ -1,18 +1,18 @@
 package com.yeosu_mate.backend.repository;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
 
 import com.yeosu_mate.backend.model.dto.RegisterUserDto;
+import com.yeosu_mate.backend.model.emums.RoleEnum;
 import com.yeosu_mate.backend.model.entity.User;
 import com.yeosu_mate.backend.model.process.ProcessResult;
 
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.*;
 
 @Repository
 @Slf4j
@@ -36,27 +36,20 @@ public class UserRepository implements UserDetailsService {
         }, username);
     }
 
-    public ProcessResult registerUser(RegisterUserDto registerUserDto) {
-        try {
-            String sql = "INSERT INTO users(id, password, nickname) VALUES(?, ?, ?)";
-            jdbcTemplate.update(sql, registerUserDto.getId(), registerUserDto.getPassword(),
-                    registerUserDto.getNickname());
-            return new ProcessResult(true, "Register completed!");
-        } catch (Exception e) {
-            log.info("*****Error Object : {}", e);
-            return new ProcessResult(false, "Something is wrong!");
-        }
+    public int getRoleId(RoleEnum role) {
+        String sql = "SELECT roleId FROM roles WHERE role=?;";
+        SqlRowSet result = jdbcTemplate.queryForRowSet(sql, role.name());
+        result.next();
+        return result.getInt("roleId");
     }
 
-    public Optional<List<User>> getAllUsers() {
-        String sql = "SELECT * FROM users;";
-        try {
-            List<User> result = jdbcTemplate.queryForList(sql, User.class);
-            return Optional.ofNullable(result);
-        } catch (Exception e) {
-            log.info("result : {}", e);
-            return Optional.ofNullable(null);
-        }
+    public ProcessResult registerUser(RegisterUserDto registerUserDto) {
+        String sql = "INSERT INTO users(userId, nickname, phoneNumber, password, profileImage, roleId) VALUE(?, ?, ? ,? ,?, ?);";
+        int roleId = getRoleId(registerUserDto.getRole());
 
+        jdbcTemplate.update(sql, registerUserDto.getUserId(), registerUserDto.getNickname(),
+                registerUserDto.getPhoneNumber(), registerUserDto.getPassword(), registerUserDto.getProfileImage(),
+                roleId);
+        return new ProcessResult(true, "");
     }
 }

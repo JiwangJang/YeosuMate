@@ -2,7 +2,7 @@ spring:
     application:
         name: client
     datasource:
-        url: jdbc:mysql://localhost:3306/test_schema
+        url: jdbc:mysql://localhost:3306/yeosu_mate
         username: root
         password: fuckDruid1!
 
