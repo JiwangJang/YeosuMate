@@ -5,6 +5,10 @@ spring:
         url: jdbc:mysql://localhost:3306/yeosu_mate
         username: root
         password: fuckDruid1!
+    redis:
+        data:
+            host: localhost
+            port: 6379
 
 server:
     port: 8080
