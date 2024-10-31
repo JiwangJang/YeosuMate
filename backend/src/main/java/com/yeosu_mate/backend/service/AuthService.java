@@ -7,7 +7,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.stereotype.Service;
 
 import com.yeosu_mate.backend.model.dto.LoginUserDto;
-import com.yeosu_mate.backend.model.process.ProcessResult;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,13 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 public class AuthService {
     private final AuthenticationManager authenticationManager;
 
-    public ProcessResult authenticate(LoginUserDto loginUserDto) throws AuthenticationException {
-        Authentication authToken = authenticationManager.authenticate(
+    public Authentication authenticate(LoginUserDto loginUserDto) throws AuthenticationException {
+        return authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginUserDto.getId(), loginUserDto.getPassword()));
-        if (authToken.isAuthenticated()) {
-            return new ProcessResult(true, "OK");
-        }
-        return new ProcessResult(false, "FAILED");
-
     }
 }

@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.concurrent.*;
+
 @Service
 @RequiredArgsConstructor
 public class RedisService {
@@ -18,10 +20,11 @@ public class RedisService {
      * 
      * @param key
      * @param value
+     * @param expiredTime 만료시간(초 단위)
      */
-    public void setStrin(String key, String value) {
+    public void setString(String key, String value, int expiredTime) {
         ValueOperations<String, String> valueOperations = stringRedisTemplate.opsForValue();
-        valueOperations.set(key, value);
+        valueOperations.set(key, value, expiredTime, TimeUnit.SECONDS);
     }
 
     /**
@@ -33,5 +36,9 @@ public class RedisService {
     public String getString(String key) {
         ValueOperations<String, String> valueOperations = stringRedisTemplate.opsForValue();
         return valueOperations.get(key);
+    }
+
+    public void delete(String key) {
+        redisTemplate.delete(key);
     }
 }

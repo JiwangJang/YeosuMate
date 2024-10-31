@@ -1,5 +1,6 @@
 package com.yeosu_mate.backend.repository;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,7 +11,6 @@ import org.springframework.stereotype.Repository;
 import com.yeosu_mate.backend.model.dto.RegisterUserDto;
 import com.yeosu_mate.backend.model.emums.RoleEnum;
 import com.yeosu_mate.backend.model.entity.User;
-import com.yeosu_mate.backend.model.process.ProcessResult;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -43,13 +43,12 @@ public class UserRepository implements UserDetailsService {
         return result.getInt("roleId");
     }
 
-    public ProcessResult registerUser(RegisterUserDto registerUserDto) {
+    public void registerUser(RegisterUserDto registerUserDto) throws DataAccessException {
         String sql = "INSERT INTO users(userId, nickname, phoneNumber, password, profileImage, roleId) VALUE(?, ?, ? ,? ,?, ?);";
         int roleId = getRoleId(registerUserDto.getRole());
 
         jdbcTemplate.update(sql, registerUserDto.getUserId(), registerUserDto.getNickname(),
                 registerUserDto.getPhoneNumber(), registerUserDto.getPassword(), registerUserDto.getProfileImage(),
                 roleId);
-        return new ProcessResult(true, "");
     }
 }
