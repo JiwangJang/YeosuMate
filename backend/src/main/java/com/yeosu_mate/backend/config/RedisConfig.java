@@ -40,7 +40,7 @@ public class RedisConfig {
 
         return RedisCacheManager
                 .builder(RedisCacheWriter.lockingRedisCacheWriter(redisConnectionFactory))
-                .cacheDefaults(RedisCacheConfiguration.defaultCacheConfig())
+                .cacheDefaults(redisCacheConfiguration)
                 .withInitialCacheConfigurations(Collections.singletonMap("configuration", redisCacheConfiguration))
                 .build();
     }
