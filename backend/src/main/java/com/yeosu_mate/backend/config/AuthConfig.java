@@ -43,7 +43,7 @@ public class AuthConfig {
                         authorize -> authorize
                                 .requestMatchers(HttpMethod.OPTIONS, "/**/*")
                                 .permitAll()
-                                .requestMatchers("/auth/register", "/auth/login", "/error")
+                                .requestMatchers("/auth/**", "/error")
                                 .permitAll()
                                 .anyRequest().authenticated());
 

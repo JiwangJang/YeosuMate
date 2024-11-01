@@ -10,15 +10,18 @@ public class RegisterProcessDto {
     /**
      * 핸드폰 인증완료했는지 체크
      */
-    boolean phoneAuthentcation;
-
-    /**
-     * 비밀번호 중복검사했는지 체크
-     */
-    boolean passwordAuthenticaiton;
+    boolean phoneAuthentcation = false;
 
     /**
      * 동일아이디 있는지 체크
      */
-    boolean sameIdAuthentication;
+    boolean sameIdAuthentication = false;
+
+    public RegisterProcessDto() {
+    }
+
+    public RegisterProcessDto(boolean sameIdAuthentication) {
+        this.sameIdAuthentication = sameIdAuthentication;
+    }
+
 }

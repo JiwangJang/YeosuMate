@@ -25,15 +25,22 @@ public class UserRepository implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        String sql = "SELECT * FROM users WHERE id=?";
+        String sql = "SELECT * FROM users WHERE userId=?";
+        UserDetails result;
 
-        return jdbcTemplate.queryForObject(sql, (row, index) -> {
-            User emptyUser = new User();
-            emptyUser.setId(row.getString("id"));
-            emptyUser.setPassword(row.getString("password"));
-            emptyUser.setNickname(row.getString("nickname"));
-            return emptyUser;
-        }, username);
+        try {
+            result = jdbcTemplate.queryForObject(sql, (row, index) -> {
+                User emptyUser = new User();
+                emptyUser.setId(row.getString("userId"));
+                emptyUser.setPassword(row.getString("password"));
+                emptyUser.setNickname(row.getString("nickname"));
+                return emptyUser;
+            }, username);
+        } catch (DataAccessException e) {
+            throw new UsernameNotFoundException("");
+        }
+
+        return result;
     }
 
     public int getRoleId(RoleEnum role) {
